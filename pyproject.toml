@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aerial-signal-recognition"
-version = "26.0"
+version = "26.1"
 description = "Viewpoint-robust body-signal recognition for commanding UAVs"
 readme = "README.md"
 requires-python = ">=3.9"

@@ -6,7 +6,7 @@ Aerial Signal Recognition identifies the aircraft-handling body signals of a per
 
 [![IEEE USYS 2026](https://img.shields.io/badge/IEEE-USYS%202026-1c1c1e?style=flat-square)](#citation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-1c1c1e?style=flat-square)](LICENSE)
-[![Release 26.0](https://img.shields.io/badge/Release-26.0-1c1c1e?style=flat-square)](https://github.com/iamabdirazak/aerial-signal-recognition/releases)
+[![Release 26.1](https://img.shields.io/badge/Release-26.1-1c1c1e?style=flat-square)](https://github.com/iamabdirazak/aerial-signal-recognition/releases)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-1c1c1e?style=flat-square)](#getting-started)
 
 ## Overview
