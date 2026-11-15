@@ -10,9 +10,9 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 
-from uavsignals.constants import WINDOW
-from uavsignals.normalisation import normalise, to_features
-from uavsignals.protocol import FOLDS, fold
+from aerialsignals.constants import WINDOW
+from aerialsignals.normalisation import normalise, to_features
+from aerialsignals.protocol import FOLDS, fold
 
 from .common import load, parser, save_json
 

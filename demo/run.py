@@ -20,9 +20,9 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 
-from uavsignals import CLASSES, Recogniser  # noqa: E402
-from uavsignals.constants import HAVE_COMMAND, WAVE_OFF  # noqa: E402
-from uavsignals.recogniser import DEFAULT_WEIGHTS  # noqa: E402
+from aerialsignals import CLASSES, Recogniser  # noqa: E402
+from aerialsignals.constants import HAVE_COMMAND, WAVE_OFF  # noqa: E402
+from aerialsignals.recogniser import DEFAULT_WEIGHTS  # noqa: E402
 
 from camera import find_camera, is_black  # noqa: E402
 from pose import PoseEstimator  # noqa: E402

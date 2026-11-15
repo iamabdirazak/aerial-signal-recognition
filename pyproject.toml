@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "uavsignals"
+name = "aerialsignals"
 version = "26.0"
 description = "Viewpoint-robust body-signal recognition for commanding UAVs"
 readme = "README.md"
@@ -18,4 +18,4 @@ demo = ["mediapipe>=0.10.14", "opencv-python>=4.8", "pillow>=10.0"]
 dev = ["pytest>=7"]
 
 [tool.setuptools]
-packages = ["uavsignals"]
+packages = ["aerialsignals"]

@@ -21,7 +21,7 @@ sys.path.insert(0, ROOT)
 
 import torch  # noqa: E402
 
-from uavsignals import Recogniser  # noqa: E402
+from aerialsignals import Recogniser  # noqa: E402
 
 from camera import find_camera  # noqa: E402
 from pose import PoseEstimator  # noqa: E402

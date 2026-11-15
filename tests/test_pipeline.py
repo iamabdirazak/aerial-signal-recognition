@@ -2,10 +2,10 @@
 import numpy as np
 import torch
 
-from uavsignals import CLASSES, Recogniser, SafetyGate
-from uavsignals.constants import FEATURE_DIM, HAVE_COMMAND, NUM_JOINTS, WAVE_OFF, WINDOW
-from uavsignals.normalisation import window_features
-from uavsignals.classification import ARCHITECTURES
+from aerialsignals import CLASSES, Recogniser, SafetyGate
+from aerialsignals.constants import FEATURE_DIM, HAVE_COMMAND, NUM_JOINTS, WAVE_OFF, WINDOW
+from aerialsignals.normalisation import window_features
+from aerialsignals.classification import ARCHITECTURES
 
 
 def standing_person(T=WINDOW, rng=None):

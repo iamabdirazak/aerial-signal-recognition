@@ -12,8 +12,8 @@ import time
 
 import torch
 
-from uavsignals.protocol import FOLDS, fold
-from uavsignals.training import CONFIGS, evaluate, train
+from aerialsignals.protocol import FOLDS, fold
+from aerialsignals.training import CONFIGS, evaluate, train
 
 from .common import OUTPUT, checkpoint_path, load, parser, save_json
 

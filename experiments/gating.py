@@ -18,10 +18,10 @@ wrong commands were executed, grouped by what they would make the drone do, and 
 """
 import numpy as np
 
-from uavsignals.constants import CLASSES, FPS, HAVE_COMMAND, WAVE_OFF, WINDOW
-from uavsignals.gating import run
-from uavsignals.protocol import FOLDS, fold
-from uavsignals.training import CONFIGS, predict
+from aerialsignals.constants import CLASSES, FPS, HAVE_COMMAND, WAVE_OFF, WINDOW
+from aerialsignals.gating import run
+from aerialsignals.protocol import FOLDS, fold
+from aerialsignals.training import CONFIGS, predict
 
 from .common import load, load_nets, parser, save_json
 from .stats import mean_ci

@@ -11,7 +11,7 @@ import os
 
 import numpy as np
 
-from uavsignals.constants import CLASSES
+from aerialsignals.constants import CLASSES
 
 from .common import OUTPUT, ROOT, load as load_videos, parser
 from .stats import mean_ci, paired_test

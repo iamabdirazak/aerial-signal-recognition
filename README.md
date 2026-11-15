@@ -19,17 +19,17 @@ Because the recogniser works on 14 body keypoints rather than images, it runs wi
 
 <img src="assets/architecture.png" alt="Architecture: input, estimation, sequencing, augmentation (training only), normalisation, classification, gating, output." width="100%">
 
-Each stage is one file in [`uavsignals/`](uavsignals).
+Each stage is one file in [`aerialsignals/`](aerialsignals).
 
 | Stage | What it does | File |
 |:--|:--|:--|
-| Sequencing | Every 0.2 s, the last 30 frames (1.2 s) form one window | [`sequencing.py`](uavsignals/sequencing.py) |
-| Augmentation | In training only, shows each window as a UAV might have seen it, tilted, rolled, with missing joints or at a lower frame rate | [`augmentation.py`](uavsignals/augmentation.py) |
-| Normalisation | Fills missing joints, centres the body on the neck, scales it by torso length and adds velocities | [`normalisation.py`](uavsignals/normalisation.py) |
-| Classification | A two-layer LSTM with 229k parameters gives a probability for each of the 13 signals | [`classification.py`](uavsignals/classification.py) |
-| Gating | Accepts a signal that wins 6 of the last 8 windows with a mean confidence of at least 0.7. The attention signal arms the gate, the next accepted signal becomes a command, and the abort signal needs no arming | [`gating.py`](uavsignals/gating.py) |
+| Sequencing | Every 0.2 s, the last 30 frames (1.2 s) form one window | [`sequencing.py`](aerialsignals/sequencing.py) |
+| Augmentation | In training only, shows each window as a UAV might have seen it, tilted, rolled, with missing joints or at a lower frame rate | [`augmentation.py`](aerialsignals/augmentation.py) |
+| Normalisation | Fills missing joints, centres the body on the neck, scales it by torso length and adds velocities | [`normalisation.py`](aerialsignals/normalisation.py) |
+| Classification | A two-layer LSTM with 229k parameters gives a probability for each of the 13 signals | [`classification.py`](aerialsignals/classification.py) |
+| Gating | Accepts a signal that wins 6 of the last 8 windows with a mean confidence of at least 0.7. The attention signal arms the gate, the next accepted signal becomes a command, and the abort signal needs no arming | [`gating.py`](aerialsignals/gating.py) |
 
-[`recogniser.py`](uavsignals/recogniser.py) joins the stages into one streaming recogniser.
+[`recogniser.py`](aerialsignals/recogniser.py) joins the stages into one streaming recogniser.
 
 ## Getting started
 
@@ -49,7 +49,7 @@ The tests need no data and finish in seconds.
 Feed `Recogniser` one frame of keypoints at a time with its timestamp. It resamples to 25 Hz, classifies every 0.2 s, applies the gate and returns a command when one is accepted.
 
 ```python
-from uavsignals import Recogniser
+from aerialsignals import Recogniser
 
 recogniser = Recogniser.from_pretrained()
 
@@ -113,7 +113,7 @@ bash scripts/run_all.sh
 | Cross-dataset evaluation | [`cross_dataset.py`](experiments/cross_dataset.py) |
 | Dataset, model size and speed | [`dataset.py`](experiments/dataset.py), [`benchmark.py`](experiments/benchmark.py) |
 
-Every model is tested on actors held out from training, in the three folds of [`protocol.py`](uavsignals/protocol.py). The outputs behind the paper are in [`results/runs`](results/runs), summarised in [`results/paper.json`](results/paper.json).
+Every model is tested on actors held out from training, in the three folds of [`protocol.py`](aerialsignals/protocol.py). The outputs behind the paper are in [`results/runs`](results/runs), summarised in [`results/paper.json`](results/paper.json).
 
 ## Citation
 

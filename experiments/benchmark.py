@@ -9,9 +9,9 @@ import time
 
 import torch
 
-from uavsignals.constants import WINDOW
-from uavsignals.training import CONFIGS
-from uavsignals.classification import build_model
+from aerialsignals.constants import WINDOW
+from aerialsignals.training import CONFIGS
+from aerialsignals.classification import build_model
 
 from .common import parser, save_json
 
