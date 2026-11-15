@@ -1,4 +1,4 @@
-"""Classifiers over windows of body-centred features, input shape (batch, 30, features)."""
+"""Classification: classifiers over windows of body-centred features, input shape (batch, 30, features)."""
 import numpy as np
 import torch
 import torch.nn as nn
@@ -7,7 +7,7 @@ from .constants import EDGES, NUM_CLASSES, NUM_JOINTS
 
 
 class SignalLSTM(nn.Module):
-    """Proposed model: LayerNorm, 2-layer unidirectional LSTM (128 units), dropout, linear head.
+    """Proposed LSTM: LayerNorm, 2-layer unidirectional LSTM (128 units), dropout, linear head.
     Unidirectional, so the hidden state can be updated frame by frame on board. 229k parameters."""
 
     def __init__(self, input_dim, num_classes=NUM_CLASSES, hidden=128):

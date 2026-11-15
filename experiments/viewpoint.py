@@ -2,14 +2,14 @@
 
 Each test clip is viewed from a camera raised to a given elevation, in three ways:
 
-  squash       the first-order vertical foreshortening used in training (augment.elevation)
+  squash       the first-order vertical foreshortening used in training (augmentation.elevation)
   perspective  the skeleton kept flat, lifted to 3D and seen through a pinhole camera 10 m away
   limb depth   as perspective, but each limb segment also gets the depth that restores its length,
                with the arms toward the camera (uavsignals.viewpoint)
 
     python -m experiments.viewpoint
 """
-from uavsignals.augment import perturbation
+from uavsignals.augmentation import perturbation
 from uavsignals.training import CONFIGS
 from uavsignals.viewpoint import drone_view
 

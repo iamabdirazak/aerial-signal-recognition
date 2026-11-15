@@ -1,10 +1,10 @@
 """Facts about the recorded data that bound how far the results extend: person size and missing joints.
 
-    python -m experiments.dataset_stats
+    python -m experiments.dataset
 """
 import numpy as np
 
-from uavsignals.features import fill_missing
+from uavsignals.normalisation import fill_missing
 
 from .common import load, parser, save_json
 
@@ -29,7 +29,7 @@ def main():
           f'({100 * result["person_height_fraction_of_frame"]:.0f}% of frame height)')
     print(f'Missing joints: {100 * result["missing_joints"]["mean"]:.1f}% on average, '
           f'{100 * result["missing_joints"]["max"]:.1f}% at most')
-    save_json(result, 'dataset_stats.json')
+    save_json(result, 'dataset.json')
 
 
 if __name__ == '__main__':

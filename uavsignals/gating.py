@@ -1,15 +1,15 @@
-"""Safety gate: decides when a stream of window predictions becomes a command.
+"""Gating: decides when a stream of window predictions becomes a command.
 
 Called once per decision step (every 0.2 s) with the latest class probabilities.
 
   naive  act whenever the top class changes (what a plain classifier does)
   vote   act when the majority class holds k of the last n windows with mean confidence >= tau
-  gate   vote, plus an attention signal: an accepted `have command` arms the gate, the next
-         accepted signal is executed and the gate disarms. `wave off` (abort) does not need the
-         attention signal, but by default it must still pass the same vote. With `wave_off=(k, n)` it
-         instead needs only k of its last n windows, so an abort can be accepted sooner.
+  gate   vote, plus arming: an accepted attention signal (`have command`) arms the gate, the next
+         accepted signal is executed and the gate disarms. The abort signal (`wave off`) does not need
+         arming, but by default it must still pass the same vote. With `wave_off=(k, n)` it instead
+         needs only k of its last n windows, so an abort can be accepted sooner.
 
-Recognising `have command` is not itself an action.
+The attention signal itself is never executed as an action.
 """
 from collections import deque
 

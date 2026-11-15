@@ -1,9 +1,9 @@
 """Streaming evaluation of the safety gate on command streams from unseen actors.
 
-Each test actor's `have command` clip is joined to each of that actor's other clips to form an armed
-stream (the operator asks for attention, then signals X). Each other clip alone forms an unarmed
-stream, in which nothing should be executed except `wave off`. Decisions are made every 0.2 s, with
-every seed's fold models from experiments.train.
+Each test actor's clip of the attention signal (`have command`) is joined to each of that actor's other
+clips to form an armed stream (the operator asks for attention, then signals X). Each other clip alone
+forms an unarmed stream, in which nothing should be executed except the abort signal (`wave off`). Decisions are made every 0.2 s, with
+every seed's fold models from experiments.recognition.
 
 Besides fixed example policies, one gate setting is chosen for each fold using only that fold's
 training actors: their streams, scored by the models of the other folds, which never saw them. The
@@ -14,12 +14,12 @@ The script also reports false wave-offs, a lighter vote for wave off (2 of the l
 wrong commands were executed, grouped by what they would make the drone do, and how each stream ends
 (the intended command alone, the intended command plus a wrong one, a wrong one only, or nothing).
 
-    python -m experiments.safety_gate
+    python -m experiments.gating
 """
 import numpy as np
 
 from uavsignals.constants import CLASSES, FPS, HAVE_COMMAND, WAVE_OFF, WINDOW
-from uavsignals.gate import run
+from uavsignals.gating import run
 from uavsignals.protocol import FOLDS, fold
 from uavsignals.training import CONFIGS, predict
 
@@ -208,7 +208,7 @@ def main():
               f'abort {100 * r["abort_executed"]["mean"]:.0f}% in {r["abort_median_latency_s"]["mean"]:.1f} s')
     save_json(dict(policies=results, stream_outcomes=endings, selected_settings=chosen, risk_groups=RISK,
                    streams_per_seed=n_streams),
-              'safety_gate.json')
+              'gating.json')
 
 
 if __name__ == '__main__':

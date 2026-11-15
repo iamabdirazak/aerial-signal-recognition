@@ -1,7 +1,7 @@
 """Perturbations of raw keypoints that approximate what an on-board pose estimator sees.
 
 They act on image-space keypoints (T, 14, 2) and the visibility mask, before normalisation.
-`augment` combines them for training; the robustness study applies each one alone, at test time.
+`augment` combines them for training; the condition tests apply each one alone, at test time.
 
   dropout         joints the detector misses (occlusion, low light, a small person)
   limb_occlusion  one arm hidden for 10 to 30 consecutive frames
@@ -13,7 +13,7 @@ They act on image-space keypoints (T, 14, 2) and the visibility mask, before nor
 import numpy as np
 
 from .constants import FPS, L_ARM, NECK, R_ARM
-from .features import torso_length
+from .normalisation import torso_length
 
 
 def dropout(x, visible, p, rng):

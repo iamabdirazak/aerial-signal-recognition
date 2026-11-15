@@ -54,7 +54,7 @@ def main():
 
     R, per_video = {'models': {}}, {}
     for name in MODELS:
-        t = load(f'train_{name}.json')
+        t = load(f'recognition_{name}.json')
         if t:
             R['models'][name], per_video[name] = summarise(t['runs'], videos)
     for name, d in (load('baselines.json') or {}).items():
@@ -73,8 +73,16 @@ def main():
             per_class.setdefault(CLASSES[videos[n].label], []).append(c)
         R['per_class'] = {c: dict(mean=float(np.mean(v)), videos=len(v)) for c, v in per_class.items()}
 
-    for key, name in [('robustness', 'robustness.json'), ('viewpoint', 'viewpoint.json'), ('gate', 'safety_gate.json'),
-                      ('dataset', 'dataset_stats.json'), ('uavhuman', 'uavhuman.json'), ('timing', 'timing.json'),
+        # what the proposed LSTM predicts for the weakest signal, over all seeds
+        confusion = {}
+        for run in load('recognition_lstm.json')['runs']:
+            for n, p in run['predictions'].items():
+                if CLASSES[videos[n].label] == 'not_clear':
+                    confusion[CLASSES[p]] = confusion.get(CLASSES[p], 0) + 1
+        R['not_clear_predictions'] = confusion
+
+    for key, name in [('conditions', 'conditions.json'), ('viewpoint', 'viewpoint.json'), ('gate', 'gating.json'),
+                      ('dataset', 'dataset.json'), ('cross_dataset', 'cross_dataset.json'), ('timing', 'timing.json'),
                       ('benchmark', 'benchmark.json')]:
         R[key] = load(name)
 

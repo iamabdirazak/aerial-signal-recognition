@@ -18,9 +18,9 @@ import numpy as np
 import torch
 
 from .constants import CLASSES, FEATURE_DIM, FPS, L_HIP, NECK, R_HIP, WINDOW
-from .features import window_features
-from .gate import SafetyGate
-from .models import SignalLSTM
+from .normalisation import window_features
+from .gating import SafetyGate
+from .classification import SignalLSTM
 
 DEFAULT_WEIGHTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                                'weights', 'uavsignals_lstm.pt')

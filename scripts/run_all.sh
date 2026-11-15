@@ -4,12 +4,12 @@
 # (scripts/prepare_uavhuman.py).
 set -euo pipefail
 cd "$(dirname "$0")/.."
-python -m experiments.train
+python -m experiments.recognition
 python -m experiments.baselines
-python -m experiments.dataset_stats
-python -m experiments.robustness
+python -m experiments.dataset
+python -m experiments.conditions
 python -m experiments.viewpoint
-python -m experiments.safety_gate
-if [ -f data/uavhuman_skeletons.npz ]; then python -m experiments.uavhuman; fi
+python -m experiments.gating
+if [ -f data/uavhuman_skeletons.npz ]; then python -m experiments.cross_dataset; fi
 python -m experiments.benchmark
 python -m experiments.summary

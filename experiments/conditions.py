@@ -1,12 +1,12 @@
 """Accuracy under simulated deployment conditions, applied to test keypoints without retraining.
 
-Uses every seed's checkpoints from experiments.train and reports the mean over seeds with a 95%
+Uses every seed's checkpoints from experiments.recognition and reports the mean over seeds with a 95%
 confidence interval.
 
-    python -m experiments.robustness
-    python -m experiments.robustness lstm --conditions elevation rotation
+    python -m experiments.conditions
+    python -m experiments.conditions lstm --conditions elevation rotation
 """
-from uavsignals.augment import perturbation
+from uavsignals.augmentation import perturbation
 from uavsignals.training import CONFIGS
 
 from .common import load, load_nets, parser, per_seed_video_accuracy, save_json
@@ -41,8 +41,8 @@ def main():
                 mean, ci = mean_ci(list(accs.values()))
                 results[name][kind][str(float(value))] = dict(video=mean, ci=ci, per_seed=accs)
                 print(f'{name:18s} {kind:13s} {value:>5}   video {100 * mean:5.1f} ± {100 * ci:.1f}%', flush=True)
-            save_json(results, 'robustness.json', quiet=True)
-    save_json(results, 'robustness.json')
+            save_json(results, 'conditions.json', quiet=True)
+    save_json(results, 'conditions.json')
 
 
 if __name__ == '__main__':

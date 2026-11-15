@@ -108,14 +108,14 @@ Then run every experiment in order with `bash scripts/run_all.sh`, or one at a t
 
 | Experiment | Command | Time |
 |:--|:--|:--|
-| Train and test every model, five seeds | `python -m experiments.train` | ~3 h |
-| Train and test the released model only | `python -m experiments.train lstm` | ~25 min |
+| Recognition on unseen actors, every model, five seeds | `python -m experiments.recognition` | ~3 h |
+| Recognition, proposed LSTM only | `python -m experiments.recognition lstm` | ~25 min |
 | Non-temporal baselines | `python -m experiments.baselines` | ~20 min |
-| Sensor and viewpoint conditions | `python -m experiments.robustness` | ~5 min |
-| Camera models unseen in training | `python -m experiments.viewpoint` | ~5 min |
-| Safety gate on command streams | `python -m experiments.safety_gate` | ~5 min |
-| UAV-Human | `python -m experiments.uavhuman` | ~5 min |
-| Dataset statistics, model size and speed | `python -m experiments.dataset_stats && python -m experiments.benchmark` | seconds |
+| Viewpoint and sensor conditions | `python -m experiments.conditions` | ~5 min |
+| Test-only camera | `python -m experiments.viewpoint` | ~5 min |
+| Command streams and gating | `python -m experiments.gating` | ~5 min |
+| Cross-dataset evaluation on UAV-Human | `python -m experiments.cross_dataset` | ~5 min |
+| Dataset statistics, model size and speed | `python -m experiments.dataset && python -m experiments.benchmark` | seconds |
 | Summary | `python -m experiments.summary` | seconds |
 
 <sub>Times are for a 2-core CPU. Every experiment after training uses the checkpoints that training writes.</sub>
@@ -129,7 +129,7 @@ Every model is tested on actors held out from training, in three folds defined i
 
 | Path | Contents |
 |:--|:--|
-| `uavsignals/` | The library: [`features`](uavsignals/features.py), [`augment`](uavsignals/augment.py), [`models`](uavsignals/models.py), [`gate`](uavsignals/gate.py), [`recogniser`](uavsignals/recogniser.py), plus data loading, folds and training |
+| `uavsignals/` | The library, one file per stage: [`sequencing`](uavsignals/sequencing.py), [`augmentation`](uavsignals/augmentation.py), [`normalisation`](uavsignals/normalisation.py), [`classification`](uavsignals/classification.py), [`gating`](uavsignals/gating.py), and the [`recogniser`](uavsignals/recogniser.py) that joins them, plus data loading, folds and training |
 | `experiments/` | One script per experiment, and the summary |
 | `demo/` | Live demo: camera, pose estimation and the window |
 | `weights/` | The released model |

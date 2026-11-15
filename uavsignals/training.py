@@ -9,10 +9,11 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from .augment import augment
+from .augmentation import augment
 from .constants import WINDOW
-from .features import pad_to_window, sliding_windows, window_features
-from .models import Standardised, build_model
+from .normalisation import window_features
+from .sequencing import pad_to_window, sliding_windows
+from .classification import Standardised, build_model
 
 TRAIN_STRIDE = 5    # training windows every 5 frames
 TEST_STRIDE = 15    # test windows every 15 frames

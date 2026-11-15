@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 
 from uavsignals.constants import WINDOW
-from uavsignals.features import normalise, to_features
+from uavsignals.normalisation import normalise, to_features
 from uavsignals.protocol import FOLDS, fold
 
 from .common import load, parser, save_json

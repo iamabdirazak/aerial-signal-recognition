@@ -4,8 +4,8 @@ import torch
 
 from uavsignals import CLASSES, Recogniser, SafetyGate
 from uavsignals.constants import FEATURE_DIM, HAVE_COMMAND, NUM_JOINTS, WAVE_OFF, WINDOW
-from uavsignals.features import window_features
-from uavsignals.models import ARCHITECTURES
+from uavsignals.normalisation import window_features
+from uavsignals.classification import ARCHITECTURES
 
 
 def standing_person(T=WINDOW, rng=None):

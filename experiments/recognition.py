@@ -3,8 +3,8 @@
 Each (configuration, fold, seed) run saves a checkpoint and its per-video predictions. Finished runs
 are skipped, so an interrupted job can simply be started again.
 
-    python -m experiments.train                          # all configurations, seeds 0-4
-    python -m experiments.train lstm tcn --seeds 0 1 2   # selected configurations and seeds
+    python -m experiments.recognition                          # all configurations, seeds 0-4
+    python -m experiments.recognition lstm tcn --seeds 0 1 2   # selected configurations and seeds
 """
 import json
 import os
@@ -21,7 +21,7 @@ SEEDS = [0, 1, 2, 3, 4]
 
 
 def results_file(name):
-    return os.path.join(OUTPUT, f'train_{name}.json')
+    return os.path.join(OUTPUT, f'recognition_{name}.json')
 
 
 def main():

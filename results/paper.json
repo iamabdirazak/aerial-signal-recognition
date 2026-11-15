@@ -224,7 +224,11 @@
    "videos": 5
   }
  },
- "robustness": {
+ "not_clear_predictions": {
+  "not_clear": 23,
+  "all_clear": 22
+ },
+ "conditions": {
   "stacked_lstm_body": {
    "elevation": {
     "0.0": {
@@ -3531,7 +3535,7 @@
    "max": 0.011172161172161132
   }
  },
- "uavhuman": {
+ "cross_dataset": {
   "signals": {
    "clips": 1908,
    "people": 111,

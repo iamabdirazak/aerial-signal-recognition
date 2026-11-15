@@ -7,7 +7,7 @@
              --per-action clips of every action are drawn at random with a fixed seed, so every action
              counts equally.
 
-    python -m experiments.uavhuman --archive data/uavhuman_skeletons.npz
+    python -m experiments.cross_dataset --archive data/uavhuman_skeletons.npz
 """
 import json
 import os
@@ -16,8 +16,8 @@ import numpy as np
 import torch
 
 from uavsignals.constants import CLASSES, FPS, HAVE_COMMAND, WINDOW
-from uavsignals.features import pad_to_window
-from uavsignals.gate import SafetyGate, run
+from uavsignals.sequencing import pad_to_window
+from uavsignals.gating import SafetyGate, run
 from uavsignals.training import CONFIGS
 from uavsignals.uavhuman import UAV_CONTROL, load_uavhuman
 
@@ -48,7 +48,7 @@ def main():
     nets = load_nets(args.config)
     seeds = sorted({s for s, _ in nets})
     clips = load_uavhuman(args.archive)
-    with open(os.path.join(OUTPUT, 'safety_gate.json')) as f:
+    with open(os.path.join(OUTPUT, 'gating.json')) as f:
         chosen = {(c['seed'], c['fold']): {k: c[k] for k in ('mode', 'k', 'n', 'tau')}
                   for c in json.load(f)['selected_settings']['False']}
 
@@ -104,7 +104,7 @@ def main():
           f'False commands per minute: every window {everyday_result["naive_per_minute"]["mean"]:.2f}, '
           f'gate {everyday_result["gate_per_minute"]["mean"]:.3f}. '
           f'Clips that arm the gate: {100 * clips_armed[0]:.1f}%')
-    save_json(dict(signals=signals, everyday=everyday_result), 'uavhuman.json')
+    save_json(dict(signals=signals, everyday=everyday_result), 'cross_dataset.json')
 
 
 if __name__ == '__main__':

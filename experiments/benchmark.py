@@ -11,7 +11,7 @@ import torch
 
 from uavsignals.constants import WINDOW
 from uavsignals.training import CONFIGS
-from uavsignals.models import build_model
+from uavsignals.classification import build_model
 
 from .common import parser, save_json
 

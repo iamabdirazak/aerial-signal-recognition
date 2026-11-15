@@ -1,4 +1,5 @@
-"""Body-centred features: the step that makes recognition independent of where the person is in frame.
+"""Normalisation: each pose is described relative to the body, so the features depend on the signal
+rather than on where the person stands in the frame or how far away the camera is.
 
 A window of raw keypoints (T, 14, 2) becomes a (T, 56) feature matrix:
 missing joints are interpolated over time, positions are centred on the neck and divided by the
@@ -6,7 +7,7 @@ median torso length, and frame-to-frame velocities are appended.
 """
 import numpy as np
 
-from .constants import L_HIP, NECK, R_HIP, WINDOW
+from .constants import L_HIP, NECK, R_HIP
 
 
 def fill_missing(x, visible):
@@ -52,18 +53,3 @@ def window_features(x, visible, norm='body', velocity=True):
     if norm == 'image':
         x = fill_missing(x, visible)
     return to_features(normalise(x, visible, norm), velocity)
-
-
-def pad_to_window(x, visible, length=WINDOW):
-    """Repeat the last frame so that clips shorter than one window can still be classified."""
-    if len(x) >= length:
-        return x, visible
-    extra = length - len(x)
-    return (np.concatenate([x, np.repeat(x[-1:], extra, 0)]),
-            np.concatenate([visible, np.repeat(visible[-1:], extra, 0)]))
-
-
-def sliding_windows(x, visible, stride, length=WINDOW):
-    """List of (keypoints, visible) windows taken every `stride` frames."""
-    x, visible = pad_to_window(x, visible, length)
-    return [(x[i:i + length], visible[i:i + length]) for i in range(0, len(x) - length + 1, stride)]

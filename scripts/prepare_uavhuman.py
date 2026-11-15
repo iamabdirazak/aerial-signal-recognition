@@ -1,4 +1,4 @@
-"""Convert UAV-Human's Skeleton.zip into one compact archive for experiments.uavhuman.
+"""Convert UAV-Human's Skeleton.zip into one compact archive for experiments.cross_dataset.
 
 UAV-Human is available for non-commercial research from https://sutdcv.github.io/uav-human-web/
 (ActionRecognition > Skeleton > Skeleton.zip, 626 MB). It may not be redistributed, so this repository
