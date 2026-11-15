@@ -1,18 +1,19 @@
-# UAV Body Signals
+# Aerial Signal Recognition
 
-Recognise the body signals of a person on the ground from a UAV's camera, and turn them into commands the UAV can act on safely.
+Aerial Signal Recognition identifies the aircraft-handling body signals of a person on the ground from the camera of an unmanned aerial vehicle (UAV), and decides when the UAV should act on them. Body keypoints from any 2D pose estimator are sequenced into short windows, normalised to the body and classified by a two-layer LSTM trained with viewpoint augmentation. A gate then turns recognised signals into flight commands only after an attention signal and a stable vote over recent windows. The repository contains the recogniser, its trained weights, a live demo and every experiment of the accompanying IEEE USYS 2026 paper.
 
 <img src="assets/demo.png" alt="The live demo: guidance on the left, the tracked skeleton in the centre, the recognised signal and the gate's state on the right." width="100%">
 
 [![IEEE USYS 2026](https://img.shields.io/badge/IEEE-USYS%202026-1c1c1e?style=flat-square)](#citation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-1c1c1e?style=flat-square)](LICENSE)
+[![Release 26.0](https://img.shields.io/badge/Release-26.0-1c1c1e?style=flat-square)](https://github.com/iamabdirazak/aerial-signal-recognition/releases)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-1c1c1e?style=flat-square)](#getting-started)
 
 ## Overview
 
 In search and rescue, a responder may need a UAV to hover, change altitude, land or abort when no radio or controller is at hand. Ground crews already direct aircraft with standard body signals, and this project recognises 13 of them from the UAV's own camera.
 
-The recogniser works on 14 body keypoints rather than images, so it runs with any 2D pose estimator, at any frame rate, in about 2 ms per decision on a CPU. A gate sits between recognition and the UAV and acts only after the person asks for attention and the signal holds steady.
+Because the recogniser works on 14 body keypoints rather than images, it runs with any 2D pose estimator, at any frame rate, in about 2 ms per decision on a CPU.
 
 ## How it works
 
@@ -35,8 +36,8 @@ Each stage is one file in [`uavsignals/`](uavsignals).
 You need Python 3.9 or later. No GPU is required.
 
 ```bash
-git clone https://github.com/iamabdirazak/uav-body-signals.git
-cd uav-body-signals
+git clone https://github.com/iamabdirazak/aerial-signal-recognition.git
+cd aerial-signal-recognition
 pip install -r requirements.txt
 python -m pytest tests
 ```

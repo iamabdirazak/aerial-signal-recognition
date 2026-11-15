@@ -5,4 +5,4 @@ from .classification import SignalLSTM, build_model
 from .recogniser import Output, Recogniser
 
 __all__ = ['CLASSES', 'SafetyGate', 'SignalLSTM', 'build_model', 'Recogniser', 'Output']
-__version__ = '1.0.0'
+__version__ = '26.0'

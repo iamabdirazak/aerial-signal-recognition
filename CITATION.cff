@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the paper below."
-title: "uavsignals: viewpoint-robust body-signal recognition for commanding UAVs"
-version: 1.0.0
+title: "Aerial Signal Recognition"
+version: "26.0"
 license: MIT
 authors:
   - family-names: Muhumed
