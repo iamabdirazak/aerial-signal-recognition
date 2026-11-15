@@ -1,8 +1,8 @@
 # UAV Body Signals
 
-Recognise the body signals of a person on the ground from a drone's camera, and turn them into commands the drone can act on safely.
+Recognise the body signals of a person on the ground from a UAV's camera, and turn them into commands the UAV can act on safely.
 
-<img src="assets/demo.png" alt="The live demo: guidance on the left, the tracked skeleton in the centre, the recognised signal and the safety gate's state on the right." width="100%">
+<img src="assets/demo.png" alt="The live demo: guidance on the left, the tracked skeleton in the centre, the recognised signal and the gate's state on the right." width="100%">
 
 [![IEEE USYS 2026](https://img.shields.io/badge/IEEE-USYS%202026-1c1c1e?style=flat-square)](#citation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-1c1c1e?style=flat-square)](LICENSE)
@@ -10,20 +10,25 @@ Recognise the body signals of a person on the ground from a drone's camera, and 
 
 ## Overview
 
-In search and rescue, a responder may need a drone to hover, change altitude, land or abort when no radio or controller is at hand. Ground crews already direct aircraft with a set of standard body signals. This project recognises 13 of them from the drone's own camera.
+In search and rescue, a responder may need a UAV to hover, change altitude, land or abort when no radio or controller is at hand. Ground crews already direct aircraft with standard body signals, and this project recognises 13 of them from the UAV's own camera.
 
-The recogniser works on 14 body keypoints rather than images, so it runs with any 2D pose estimator, at any frame rate, in about 2 ms per decision on a CPU. A safety gate sits between recognition and the drone, and acts only after the person asks for attention and the signal holds steady.
+The recogniser works on 14 body keypoints rather than images, so it runs with any 2D pose estimator, at any frame rate, in about 2 ms per decision on a CPU. A gate sits between recognition and the UAV and acts only after the person asks for attention and the signal holds steady.
 
 ## How it works
 
 <img src="assets/architecture.png" alt="Architecture: input, estimation, sequencing, augmentation (training only), normalisation, classification, gating, output." width="100%">
 
-1. **Estimation.** A pose estimator finds 14 body joints in each camera frame. Any 2D estimator works.
-2. **Sequencing.** Every 0.2 s, the last 30 frames (1.2 s) form one window, so consecutive windows overlap.
-3. **Augmentation.** During training only, each window is shown as a drone might have seen it, tilted, rolled, with missing joints or at a lower frame rate. This is what keeps recognition working as the camera looks down.
-4. **Normalisation.** Missing joints are filled in over time, and the keypoints are centred on the neck and scaled by torso length, so position in the frame and distance to the camera no longer matter. Joint velocities are added.
-5. **Classification.** A two-layer LSTM with 229k parameters reads the window and gives a probability for each of the 13 signals.
-6. **Gating.** A signal is accepted when it wins 6 of the last 8 windows with a mean confidence of at least 0.7. *Have command* arms the gate and the next accepted signal becomes a flight command. *Wave off* aborts at any time without arming, but it still has to pass the same vote.
+Each stage is one file in [`uavsignals/`](uavsignals).
+
+| Stage | What it does | File |
+|:--|:--|:--|
+| Sequencing | Every 0.2 s, the last 30 frames (1.2 s) form one window | [`sequencing.py`](uavsignals/sequencing.py) |
+| Augmentation | In training only, shows each window as a UAV might have seen it, tilted, rolled, with missing joints or at a lower frame rate | [`augmentation.py`](uavsignals/augmentation.py) |
+| Normalisation | Fills missing joints, centres the body on the neck, scales it by torso length and adds velocities | [`normalisation.py`](uavsignals/normalisation.py) |
+| Classification | A two-layer LSTM with 229k parameters gives a probability for each of the 13 signals | [`classification.py`](uavsignals/classification.py) |
+| Gating | Accepts a signal that wins 6 of the last 8 windows with a mean confidence of at least 0.7. The attention signal arms the gate, the next accepted signal becomes a command, and the abort signal needs no arming | [`gating.py`](uavsignals/gating.py) |
+
+[`recogniser.py`](uavsignals/recogniser.py) joins the stages into one streaming recogniser.
 
 ## Getting started
 
@@ -40,7 +45,7 @@ The tests need no data and finish in seconds.
 
 ## Use it in your own system
 
-`Recogniser` is the single entry point. Feed it one frame of keypoints at a time with its timestamp. It resamples to 25 Hz, classifies every 0.2 s, applies the safety gate and returns a command when one is accepted.
+Feed `Recogniser` one frame of keypoints at a time with its timestamp. It resamples to 25 Hz, classifies every 0.2 s, applies the gate and returns a command when one is accepted.
 
 ```python
 from uavsignals import Recogniser
@@ -55,13 +60,10 @@ for t, keypoints, visible in pose_stream():        # seconds, (14, 2) pixels, (1
 
 Each result also carries the class probabilities (`out.probs`), the most likely signal (`out.signal`) and whether the gate is armed (`out.armed`).
 
-| Input | Details |
-|:--|:--|
-| **Keypoints** | 14 joints in COCO body order without eyes and ears. Nose and neck, then right shoulder, elbow and wrist, left shoulder, elbow and wrist, right hip, knee and ankle, and left hip, knee and ankle. Without a neck joint, use the midpoint of the shoulders. |
-| **Frame rate** | Any. The pose estimator sets the pace, and recognition holds down to about 3 fps. Run `python demo/benchmark.py` to time the full pipeline on your device. |
-| **Gate** | Pass `k`, `n` and `tau` to `from_pretrained` to make the gate stricter or more responsive. |
-| **Signals** | *all clear, have command, hover, land, landing direction, move ahead, move downward, move to left, move to right, move upward, not clear, slow down, wave off* |
-| **Retraining** | For another pose estimator or new signals, retrain with [`training.py`](uavsignals/training.py). The released model was trained on every video of UAV-GESTURE. |
+- **Keypoints.** 14 joints in COCO body order without eyes and ears. Without a neck joint, use the midpoint of the shoulders.
+- **Frame rate.** Any. Recognition holds down to about 3 fps, and `python demo/benchmark.py` times the full pipeline on your device.
+- **Gate.** Pass `k`, `n` and `tau` to `from_pretrained` to make the gate stricter or more responsive.
+- **Signals.** *all clear, have command* (attention), *hover, land, landing direction, move ahead, move downward, move to left, move to right, move upward, not clear, slow down, wave off* (abort).
 
 ## Live demo
 
@@ -72,13 +74,13 @@ pip install -r demo/requirements.txt
 python demo/run.py                    # or --camera 1, or --video clip.mp4
 ```
 
-Stand 2 to 4 m from the camera with your whole body in view. Perform *have command* until Output shows **Ready**, then perform the signal shown in Guide. Press N or P to change signal, V to switch view, R to reset and Q to quit.
+Stand 2 to 4 m from the camera with your whole body in view. Perform the attention signal until Output shows **Ready**, then perform the signal shown in Guide. Press N or P to change signal, V to switch view, R to reset and Q to quit.
 
-The model was trained on drone footage, and the demo uses a ground-level camera with a different pose estimator, so treat it as a demonstration rather than a measure of accuracy.
+The released weights were trained on UAV footage, while the demo uses a ground-level camera and a different pose estimator, so treat it as a demonstration rather than a measure of accuracy.
 
 ## Performance
 
-Measured offline on recorded aerial video, on people the model never saw in training, as the mean of five training runs.
+Measured offline on recorded aerial video, on people unseen in training, as the mean of five training runs.
 
 | Measure | Result |
 |:--|--:|
@@ -86,58 +88,31 @@ Measured offline on recorded aerial video, on people the model never saw in trai
 | Accuracy with the camera tilted 70° down (simulated) | 85.4% |
 | Accuracy on another dataset without retraining ([UAV-Human](https://sutdcv.github.io/uav-human-web/)) | 55.1% |
 | Wrong actions per command stream, without and with the gate | 4.60 → 0.05 |
-| Recogniser time per decision, laptop CPU | 2.1 ms |
+| Time per decision, laptop CPU | 2.1 ms |
 
-The model has not been flight-tested. It is least reliable when the signalling arms point toward a steeply angled camera, and on footage from a camera and pose estimator it was not trained with. It has no class for unrelated movement, so the gate is what keeps everyday motion from becoming commands. The paper covers where the model holds and where it breaks in detail.
+The recogniser has not been flight-tested. It is least reliable when the signalling arms point toward a steeply angled camera, and on footage from a camera and pose estimator it was not trained with. It has no class for unrelated movement, so the gate is what keeps everyday motion from becoming commands.
 
 ## Reproducing the results
 
-Download the UAV-GESTURE keypoints and splits (16 MB, the videos are not needed).
+Download the UAV-GESTURE keypoints (16 MB). The cross-dataset test also needs the skeleton data of [UAV-Human](https://sutdcv.github.io/uav-human-web/), which is available for non-commercial research and cannot be redistributed.
 
 ```bash
 bash scripts/get_data.sh
-```
-
-The cross-dataset test also needs the skeleton data of [UAV-Human](https://sutdcv.github.io/uav-human-web/). It is available for non-commercial research and cannot be redistributed, so download `Skeleton.zip` from its website and convert it once.
-
-```bash
 python scripts/prepare_uavhuman.py ~/Downloads/Skeleton.zip data/uavhuman_skeletons.npz
+bash scripts/run_all.sh
 ```
 
-Then run every experiment in order with `bash scripts/run_all.sh`, or one at a time.
+`run_all.sh` runs one script per section of the paper's evaluation, about four hours on a 2-core CPU.
 
-| Experiment | Command | Time |
-|:--|:--|:--|
-| Recognition on unseen actors, every model, five seeds | `python -m experiments.recognition` | ~3 h |
-| Recognition, proposed LSTM only | `python -m experiments.recognition lstm` | ~25 min |
-| Non-temporal baselines | `python -m experiments.baselines` | ~20 min |
-| Viewpoint and sensor conditions | `python -m experiments.conditions` | ~5 min |
-| Test-only camera | `python -m experiments.viewpoint` | ~5 min |
-| Command streams and gating | `python -m experiments.gating` | ~5 min |
-| Cross-dataset evaluation on UAV-Human | `python -m experiments.cross_dataset` | ~5 min |
-| Dataset statistics, model size and speed | `python -m experiments.dataset && python -m experiments.benchmark` | seconds |
-| Summary | `python -m experiments.summary` | seconds |
-
-<sub>Times are for a 2-core CPU. Every experiment after training uses the checkpoints that training writes.</sub>
-
-Every model is tested on actors held out from training, in three folds defined in [`protocol.py`](uavsignals/protocol.py). Outputs go to `runs/`, and training can be stopped and restarted. The outputs behind the paper are in [`results/runs`](results/runs), summarised in [`results/paper.json`](results/paper.json). Training is seeded, but numbers can still shift slightly with the PyTorch version and the processor.
-
-<details>
-<summary><b>Repository layout</b></summary>
-
-<br>
-
-| Path | Contents |
+| Section | Script |
 |:--|:--|
-| `uavsignals/` | The library, one file per stage: [`sequencing`](uavsignals/sequencing.py), [`augmentation`](uavsignals/augmentation.py), [`normalisation`](uavsignals/normalisation.py), [`classification`](uavsignals/classification.py), [`gating`](uavsignals/gating.py), and the [`recogniser`](uavsignals/recogniser.py) that joins them, plus data loading, folds and training |
-| `experiments/` | One script per experiment, and the summary |
-| `demo/` | Live demo: camera, pose estimation and the window |
-| `weights/` | The released model |
-| `results/` | Experiment outputs and their summary |
-| `scripts/` | Data download and preparation, and a script that runs every experiment |
-| `tests/` | Fast checks that need no data |
+| Recognition on unseen actors | [`recognition.py`](experiments/recognition.py), [`baselines.py`](experiments/baselines.py) |
+| Viewpoint and sensor conditions | [`conditions.py`](experiments/conditions.py), [`viewpoint.py`](experiments/viewpoint.py) |
+| Command streams and gating | [`gating.py`](experiments/gating.py) |
+| Cross-dataset evaluation | [`cross_dataset.py`](experiments/cross_dataset.py) |
+| Dataset, model size and speed | [`dataset.py`](experiments/dataset.py), [`benchmark.py`](experiments/benchmark.py) |
 
-</details>
+Every model is tested on actors held out from training, in the three folds of [`protocol.py`](uavsignals/protocol.py). The outputs behind the paper are in [`results/runs`](results/runs), summarised in [`results/paper.json`](results/paper.json).
 
 ## Citation
 
