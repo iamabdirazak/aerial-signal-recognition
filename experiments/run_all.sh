@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Every experiment in the paper, in order. Finished training runs are skipped, so this can be restarted.
-# Needs data/UAV-GESTURE (scripts/get_data.sh) and, for the last step, data/uavhuman_skeletons.npz
-# (scripts/prepare_uavhuman.py).
+# Needs data/UAV-GESTURE (data/get_uavgesture.sh) and, for the last step, data/uavhuman_skeletons.npz
+# (data/prepare_uavhuman.py).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 python -m experiments.recognition

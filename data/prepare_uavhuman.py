@@ -4,7 +4,7 @@ UAV-Human is available for non-commercial research from https://sutdcv.github.io
 (ActionRecognition > Skeleton > Skeleton.zip, 626 MB). It may not be redistributed, so this repository
 does not include it.
 
-    python scripts/prepare_uavhuman.py ~/Downloads/Skeleton.zip data/uavhuman_skeletons.npz
+    python data/prepare_uavhuman.py ~/Downloads/Skeleton.zip data/uavhuman_skeletons.npz
 
 Each text file holds the frame count, then per frame the number of bodies and, per body, an
 information line and 17 joints of 12 values each, of which the first two are pixel coordinates.

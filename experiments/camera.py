@@ -14,8 +14,8 @@ robustness independently of that model, each recorded skeleton is instead
 """
 import numpy as np
 
-from .constants import L_HIP, NECK, R_HIP
-from .normalisation import fill_missing, torso_length
+from model.constants import L_HIP, NECK, R_HIP
+from model.normalisation import fill_missing, torso_length
 
 TORSO_M = 0.52            # neck to mid-hip, adult average (metres)
 FOCAL_PX = 1000.0         # pinhole focal length for a 1920 x 1080 image

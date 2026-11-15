@@ -3,13 +3,13 @@
 UAV-Human (Li et al., CVPR 2021) records 155 actions from a UAV hovering 2 to 8 m high, with 2D poses
 of 17 COCO joints estimated automatically. Its UAV-control gestures include the 13 UAV-GESTURE signals
 under other names. The data cannot be redistributed, so it is read from a local archive prepared by
-scripts/prepare_uavhuman.py.
+data/prepare_uavhuman.py.
 """
 import re
 
 import numpy as np
 
-from .constants import CLASSES
+from model.constants import CLASSES
 
 # UAV-Human action -> UAV-GESTURE signal
 SIGNAL_OF_ACTION = {

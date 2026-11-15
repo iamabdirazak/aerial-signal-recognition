@@ -30,7 +30,7 @@ def parser(description):
 
 
 def load(args):
-    from aerialsignals.data import DEFAULT_ROOT, load_dataset
+    from data.uavgesture import DEFAULT_ROOT, load_dataset
     return load_dataset(args.data or DEFAULT_ROOT)
 
 
@@ -52,14 +52,14 @@ def trained_runs(name):
 
 def load_nets(name):
     """{(seed, fold): network} for every trained run of a configuration."""
-    from aerialsignals.training import CONFIGS, load_model
+    from model.training import CONFIGS, load_model
     return {(s, k): load_model(CONFIGS[name], checkpoint_path(name, k, s)) for s, k in trained_runs(name)}
 
 
 def per_seed_video_accuracy(nets, cfg, videos, perturb=None):
     """Video accuracy for each seed, pooled over the test videos of all folds."""
-    from aerialsignals.protocol import fold
-    from aerialsignals.training import evaluate
+    from data.protocol import fold
+    from model.training import evaluate
     correct = {}
     for (s, k), net in nets.items():
         _, test_names = fold(videos, k)

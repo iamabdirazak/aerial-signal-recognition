@@ -9,7 +9,7 @@ import time
 
 import numpy as np
 
-from aerialsignals.constants import CLASSES, EDGES, HAVE_COMMAND
+from model.constants import CLASSES, EDGES, HAVE_COMMAND
 
 PRETTY = {c: c.replace('_', ' ').capitalize() for c in CLASSES}
 

@@ -6,8 +6,8 @@ confidence interval.
     python -m experiments.conditions
     python -m experiments.conditions lstm --conditions elevation rotation
 """
-from aerialsignals.augmentation import perturbation
-from aerialsignals.training import CONFIGS
+from model.augmentation import perturbation
+from model.training import CONFIGS
 
 from .common import load, load_nets, parser, per_seed_video_accuracy, save_json
 from .stats import mean_ci

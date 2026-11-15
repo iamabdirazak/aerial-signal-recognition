@@ -10,7 +10,7 @@ from dataclasses import dataclass
 import numpy as np
 import scipy.io as sio
 
-from .constants import CLASSES, NUM_JOINTS
+from model.constants import CLASSES, NUM_JOINTS
 
 DEFAULT_ROOT = os.environ.get('UAVG_ROOT', os.path.join('data', 'UAV-GESTURE', 'UAVGESTURE'))
 
@@ -36,6 +36,6 @@ def load_dataset(root=DEFAULT_ROOT):
             videos[name] = Video(keypoints, visible, label, name.split('_')[0])
     if not videos:
         raise FileNotFoundError(
-            f'No keypoint files found under {root!r}. Run scripts/get_data.sh '
+            f'No keypoint files found under {root!r}. Run data/get_uavgesture.sh '
             'or set UAVG_ROOT to the UAVGESTURE folder.')
     return videos

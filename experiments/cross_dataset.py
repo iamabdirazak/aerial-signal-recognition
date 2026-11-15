@@ -15,11 +15,11 @@ import os
 import numpy as np
 import torch
 
-from aerialsignals.constants import CLASSES, FPS, HAVE_COMMAND, WINDOW
-from aerialsignals.sequencing import pad_to_window
-from aerialsignals.gating import SafetyGate, run
-from aerialsignals.training import CONFIGS
-from aerialsignals.uavhuman import UAV_CONTROL, load_uavhuman
+from model.constants import CLASSES, FPS, HAVE_COMMAND, WINDOW
+from model.sequencing import pad_to_window
+from model.gating import SafetyGate, run
+from model.training import CONFIGS
+from data.uavhuman import UAV_CONTROL, load_uavhuman
 
 from .common import OUTPUT, load_nets, parser, save_json
 from .stats import mean_ci

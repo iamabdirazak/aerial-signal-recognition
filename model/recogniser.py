@@ -23,7 +23,7 @@ from .gating import SafetyGate
 from .classification import SignalLSTM
 
 DEFAULT_WEIGHTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                               'weights', 'aerialsignals_lstm.pt')
+                               'weights', 'lstm.pt')
 STEP_SECONDS = 0.2
 
 

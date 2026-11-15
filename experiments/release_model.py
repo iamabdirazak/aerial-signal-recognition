@@ -9,8 +9,8 @@ import os
 
 import torch
 
-from aerialsignals.recogniser import DEFAULT_WEIGHTS
-from aerialsignals.training import CONFIGS, train
+from model.recogniser import DEFAULT_WEIGHTS
+from model.training import CONFIGS, train
 
 from .common import load, parser
 

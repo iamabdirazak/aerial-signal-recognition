@@ -4,7 +4,7 @@
 """
 import numpy as np
 
-from aerialsignals.normalisation import fill_missing
+from model.normalisation import fill_missing
 
 from .common import load, parser, save_json
 
