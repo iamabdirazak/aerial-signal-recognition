@@ -1,8 +1,8 @@
 # Aerial Signal Recognition
 
-![Aerial Signal Recognition Model](docs/model.png)
+![Signal Recognition Model](docs/model.png)
 
-Aerial Signal Recognition is a compact model that recognises the aircraft-handling body signals of a person on the ground from the camera of an unmanned aerial vehicle (UAV), and decides when the UAV should act on them. It reads body keypoints from any 2D pose estimator, recognises 13 standard signals such as hover, land and wave off, and turns them into flight commands only when a signal is deliberate and stable. It was built for search and rescue, where a responder may need to direct a UAV without a radio or controller.
+Aerial Signal Recognition is a compact signal recognition model that identifies the aircraft-handling body signals of a person on the ground from the camera of an unmanned aerial vehicle (UAV), and decides when the UAV should act on them. It reads body keypoints from any 2D pose estimator, recognises 13 standard signals such as hover, land and wave off, and turns them into flight commands only when a signal is deliberate and stable. It was built for search and rescue, where a responder may need to direct a UAV without a radio or controller.
 
 ## How It Works
 
@@ -46,7 +46,7 @@ On a second dataset, UAV-Human, recorded with other people, cameras and a differ
 
 ## How It Decides
 
-A recogniser that acts on every window would turn every passing movement into a command. The gate separates deliberate signals from everything else. It waits for the attention signal, then accepts a command only once it has won most of the recent windows with high confidence. The abort signal skips this wait, so the UAV can always be stopped.
+A model that acted on every window would turn every passing movement into a command. The gate separates deliberate signals from everything else. It waits for the attention signal, then accepts a command only once it has won most of the recent windows with high confidence. The abort signal skips this wait, so the UAV can always be stopped.
 
 <p>
   <img src="docs/outcomes.png" alt="How each command stream ends under three decision strategies">
@@ -79,17 +79,17 @@ pip install -r requirements.txt
 python -m pytest tests
 ```
 
-### Recognising a Pose Stream
+### Classifying a Pose Stream
 
-Feed the recogniser one frame of keypoints at a time with its timestamp. It resamples to 25 Hz, classifies every 0.2 seconds, applies the gate and returns a command when one is accepted.
+Give the model one frame of keypoints at a time with its timestamp. It resamples to 25 Hz, classifies every 0.2 seconds, applies the gate and returns a command when one is accepted.
 
 ```python
 from model import Recogniser
 
-recogniser = Recogniser.from_pretrained()
+model = Recogniser.from_pretrained()
 
 for t, keypoints, visible in pose_stream():        # seconds, (14, 2) pixels, (14,) bool
-    out = recogniser.push(t, keypoints, visible)
+    out = model.push(t, keypoints, visible)
     if out and out.command:
         send_to_flight_controller(out.command)     # e.g. 'hover', 'land', 'wave_off'
 ```
@@ -113,7 +113,7 @@ python demo/run.py                    # or --camera 1, or --video clip.mp4
 <p>
   <img src="docs/demo.png" alt="The live demo">
   <br>
-  <sub><b>The live demo.</b> Guidance for the selected signal on the left, the tracked skeleton in the centre, and the recognised signal with the gate's state on the right.</sub>
+  <sub><b>The live demo.</b> Guidance for the selected signal on the left, the tracked skeleton in the centre, and the identified signal with the gate's state on the right.</sub>
 </p>
 
 Stand 2 to 4 m from the camera with your whole body in view. Perform the attention signal until Output shows Ready, then perform the signal shown in Guide. Press N or P to change signal, V to switch view, R to reset and Q to quit. The demo uses a ground-level camera and a different pose estimator from the training data, so it is a demonstration rather than a measure of accuracy.
