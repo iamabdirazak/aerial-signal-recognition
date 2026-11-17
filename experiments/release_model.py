@@ -1,4 +1,4 @@
-"""Train the released model on all 119 videos (every actor) and save it to weights/.
+"""Train the released model on all 119 videos (every actor) and save it to models/.
 
 This is the model used by the live demo and by Recogniser.from_pretrained(). Its accuracy cannot
 be measured on UAV-GESTURE, since no actor is held out; the fold results describe the method.

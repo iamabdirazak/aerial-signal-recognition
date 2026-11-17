@@ -1,0 +1,45 @@
+{
+  "name": "Aerial Signal Recognition",
+  "task": "Aircraft-handling body signal from a window of 2D body keypoints",
+  "input": {
+    "name": "windows",
+    "shape": [
+      "batch",
+      30,
+      56
+    ],
+    "frames": 30,
+    "rate_hz": 25,
+    "features": "14 joints, body-centred position and velocity"
+  },
+  "output": {
+    "name": "logits",
+    "classes": [
+      "all_clear",
+      "have_command",
+      "hover",
+      "land",
+      "landing_direction",
+      "move_ahead",
+      "move_downward",
+      "move_to_left",
+      "move_to_right",
+      "move_upward",
+      "not_clear",
+      "slow_down",
+      "wave_off"
+    ]
+  },
+  "parameters": 229117,
+  "file": {
+    "name": "model.onnx",
+    "kilobytes": 899.3
+  },
+  "check": {
+    "largest_difference": 3.5762786865234375e-06,
+    "same_decision": 1.0,
+    "milliseconds_per_window": 0.361,
+    "machine": "Linux x86_64"
+  },
+  "training": "UAV-GESTURE, all 119 videos, two-layer LSTM with viewpoint augmentation"
+}

@@ -1,6 +1,6 @@
-"""Gather every number the paper reports into results/paper.json, from the experiment outputs in runs/results.
+"""Gather every number the paper reports into reports/paper.json, from the experiment outputs in runs/results.
 
-    python -m experiments.summary                      # writes results/paper.json
+    python -m experiments.summary                      # writes reports/paper.json
     python -m experiments.summary --out my_runs.json   # somewhere else
 
 Accuracy is pooled over the 93 test videos for each seed, then summarised as the mean over seeds with a 95%
@@ -48,7 +48,7 @@ def summarise(runs, videos):
 
 def main():
     p = parser(__doc__)
-    p.add_argument('--out', default=os.path.join(ROOT, 'results', 'paper.json'))
+    p.add_argument('--out', default=os.path.join(ROOT, 'reports', 'paper.json'))
     args = p.parse_args()
     videos = load_videos(args)
 
